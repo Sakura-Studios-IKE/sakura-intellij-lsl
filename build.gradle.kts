@@ -49,10 +49,15 @@ dependencies {
         if (!explicit.isNullOrBlank()) {
             local(explicit)
         } else {
-            create(
-                providers.gradleProperty("platformType").get(),
-                providers.gradleProperty("platformVersion").get()
-            )
+            val type = providers.gradleProperty("platformType").get()
+            val version = providers.gradleProperty("platformVersion").get()
+            // IntelliJ Platform Gradle plugin 2.x: IDEA Community is no
+            // longer published to Maven since 253; use the typed helpers.
+            when (type) {
+                "IC" -> intellijIdeaCommunity(version)
+                "IU" -> intellijIdeaUltimate(version)
+                else -> create(type, version)
+            }
         }
         pluginVerifier()
         zipSigner()
