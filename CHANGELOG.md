@@ -9,6 +9,24 @@ pipeline promotes it to a numbered version on tag.
 
 ## [Unreleased]
 
+## [1.0.2] — 2026-05-15
+
+### Fixed
+- **Distorted icon at tool-window stripe and run-configuration dropdown.**
+  The Sakura mark SVG declared `width="200" height="200"` in its header,
+  so IntelliJ components that respect intrinsic icon size rendered the
+  artwork at 200 pixels and ballooned the surrounding chrome. SVGs are
+  now per-context-sized:
+  - `icons/lsl.svg` — 16×16 (file type, completion, run-config types,
+    actions)
+  - `icons/lsl_toolwindow.svg` — 13×13 (tool-window stripe; IntelliJ
+    standard size)
+  - `META-INF/pluginIcon.svg` / `_dark.svg` — 40×40 (Marketplace listing
+    logo; JetBrains spec)
+  PNG fallbacks regenerated at their correct pixel dimensions.
+- Tool window now references `LslIcons.TOOL_WINDOW` (13×13) instead of
+  reusing the file-type icon.
+
 ## [1.0.1] — 2026-05-15
 
 ### Changed

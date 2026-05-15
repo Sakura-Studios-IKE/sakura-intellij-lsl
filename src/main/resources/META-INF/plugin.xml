@@ -114,7 +114,7 @@
         <toolWindow
             id="Sakura LSL"
             anchor="bottom"
-            icon="com.sakurastudios.lsl.LslIcons.FILE"
+            icon="com.sakurastudios.lsl.LslIcons.TOOL_WINDOW"
             factoryClass="com.sakurastudios.lsl.LslToolWindowFactory"/>
 
         <!-- New Project wizard templates (IntelliJ Community + Ultimate). -->
