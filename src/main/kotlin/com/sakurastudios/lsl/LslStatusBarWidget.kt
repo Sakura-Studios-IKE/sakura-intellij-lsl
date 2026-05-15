@@ -10,11 +10,11 @@ import com.intellij.openapi.wm.StatusBarWidget.IconPresentation
 import com.intellij.openapi.wm.StatusBarWidget.WidgetPresentation
 import com.intellij.openapi.wm.StatusBarWidgetFactory
 import com.intellij.util.Alarm
+import com.intellij.util.Consumer
 import java.awt.Color
 import java.awt.Component
 import java.awt.Graphics
 import java.awt.event.MouseEvent
-import java.util.function.Consumer
 import javax.swing.Icon
 
 /**
