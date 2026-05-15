@@ -87,7 +87,7 @@ class SlemuRunState(
         // 1) Compile with lslc. We invoke it synchronously and surface failure
         //    as an ExecutionException so the user sees it in the run console.
         val lslc = settings.lslcPath.ifBlank { "lslc" }
-        val compileCmd = mutableListOf(lslc, "--fno-color")
+        val compileCmd = mutableListOf(lslc, "-c", "-fno-color")
         if (settings.extraLslcFlags.isNotBlank()) {
             compileCmd += settings.extraLslcFlags.split(Regex("\\s+")).filter { it.isNotBlank() }
         }
@@ -105,15 +105,24 @@ class SlemuRunState(
             )
         }
 
-        // 2) Hand off to slemu.
+        // 2) Hand the compiled .lslbc off to slemu (not the original .lsl).
+        //    lslc -c writes <stem>.lslbc beside the input by default.
+        val bytecodePath = run {
+            val s = script
+            val dot = s.lastIndexOf('.')
+            val stem = if (dot > 0 && (s.endsWith(".lsl") || s.endsWith(".lslh") || s.endsWith(".txt"))) s.substring(0, dot) else s
+            "$stem.lslbc"
+        }
         val slemu = settings.slemuPath.ifBlank { "slemu" }
         val cmd = GeneralCommandLine(slemu)
-        cmd.addParameter(script)
+        // slemu takes options BEFORE the script. Inject any user-specified
+        // options first, then the .lslbc path.
         if (cfg.slemuArgs.isNotBlank()) {
             for (a in cfg.slemuArgs.split(Regex("\\s+")).filter { it.isNotBlank() }) {
                 cmd.addParameter(a)
             }
         }
+        cmd.addParameter(bytecodePath)
         cmd.charset = Charsets.UTF_8
         cmd.setWorkDirectory(scriptFile.parentFile?.absolutePath ?: ".")
 

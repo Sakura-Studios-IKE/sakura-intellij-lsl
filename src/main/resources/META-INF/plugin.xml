@@ -70,6 +70,18 @@
             language="sakura-lsl"
             implementationClass="com.sakurastudios.lsl.LslAnnotator"/>
 
+        <lang.commenter
+            language="sakura-lsl"
+            implementationClass="com.sakurastudios.lsl.LslCommenter"/>
+
+        <lang.braceMatcher
+            language="sakura-lsl"
+            implementationClass="com.sakurastudios.lsl.LslBraceMatcher"/>
+
+        <lang.documentationProvider
+            language="sakura-lsl"
+            implementationClass="com.sakurastudios.lsl.LslDocumentationProvider"/>
+
         <configurationType
             implementation="com.sakurastudios.lsl.LslRunConfigurationType"/>
 

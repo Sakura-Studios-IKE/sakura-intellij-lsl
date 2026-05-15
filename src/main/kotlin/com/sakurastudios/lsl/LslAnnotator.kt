@@ -76,7 +76,7 @@ class LslAnnotator : ExternalAnnotator<LslAnnotator.CompileInfo, LslAnnotator.Co
         }
 
         try {
-            val command = mutableListOf(lslc, "--fno-color", "-Wall")
+            val command = mutableListOf(lslc, "-fno-color", "-Wall")
             if (settings.extraLslcFlags.isNotBlank()) {
                 command += settings.extraLslcFlags.split(Regex("\\s+"))
                     .filter { it.isNotBlank() }

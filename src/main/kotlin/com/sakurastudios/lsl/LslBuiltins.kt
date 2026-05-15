@@ -1,102 +1,127 @@
 package com.sakurastudios.lsl
 
+import java.io.BufferedReader
+import java.io.InputStreamReader
+
 /**
- * Static catalogue of the most common LSL built-in functions, constants, and
- * event handlers used by the completion contributor.
+ * Catalogue of every LSL built-in function, constant, and event handler
+ * that the completion contributor and documentation provider expose.
  *
- * The list is intentionally a representative subset (~60 functions, ~40
- * constants, all event names) rather than the full ~430-function table that
- * `sakura-lslc` knows about; the full table will be bundled as
- * `builtins.txt` in a future release.
+ * Loaded once at class-init time from the resource
+ * `/builtins/lsl-builtins.txt`, which is the verbatim output of
+ * `sakura-lslc --list-builtins`. Regenerate by running
+ *
+ *     ./sakura-lslc/lslc --list-builtins > \
+ *         sakura-intellij-lsl/src/main/resources/builtins/lsl-builtins.txt
+ *
+ * Format of the resource (line-oriented):
+ *
+ *     # 540 functions
+ *     llGetOwner
+ *     llGetCreator
+ *     ...
+ *     # 534 constants
+ *     TRUE
+ *     FALSE
+ *     ...
+ *     # 49 events
+ *     state_entry
+ *     ...
  */
 object LslBuiltins {
 
     @JvmField
-    val FUNCTIONS: List<String> = listOf(
-        // Avatar / object / world info
-        "llGetOwner", "llGetKey", "llGetObjectName", "llSetObjectName",
-        "llGetPos", "llSetPos", "llGetRot", "llSetRot",
-        "llGetScale", "llSetScale", "llGetVel", "llGetTime",
-        "llResetTime", "llGetUnixTime", "llGetRegionName",
-        // Math / conversion
-        "llAbs", "llFabs", "llCeil", "llFloor", "llRound",
-        "llSqrt", "llPow", "llCos", "llSin", "llAtan2",
-        "llFrand", "llVecMag", "llVecNorm", "llVecDist",
-        // List helpers
-        "llGetListLength", "llList2String", "llList2Integer",
-        "llList2Float", "llList2Vector", "llList2Key", "llList2List",
-        "llCSV2List", "llList2CSV", "llListInsertList",
-        "llListReplaceList", "llListSort", "llParseString2List",
-        "llDumpList2String",
-        // String helpers
-        "llStringLength", "llGetSubString", "llSubStringIndex",
-        "llToLower", "llToUpper", "llStringTrim", "llEscapeURL",
-        "llUnescapeURL", "llBase64ToString", "llStringToBase64",
-        // Comms
-        "llSay", "llShout", "llWhisper", "llOwnerSay",
-        "llRegionSay", "llRegionSayTo", "llInstantMessage",
-        "llDialog", "llListen", "llListenRemove",
-        // Timers / sensor
-        "llSetTimerEvent", "llSensor", "llSensorRepeat", "llSensorRemove",
-        // Inventory / scripts
-        "llResetScript", "llGetInventoryName", "llGetInventoryNumber",
-        "llGiveInventory", "llRemoveInventory",
-        // HTTP
-        "llHTTPRequest", "llHTTPResponse",
-        // Misc utility
-        "llDie", "llSleep", "llRequestPermissions", "llTakeControls",
-        "llReleaseControls"
-    )
+    val FUNCTIONS: List<String>
 
     @JvmField
-    val CONSTANTS: List<String> = listOf(
-        "TRUE", "FALSE", "NULL_KEY", "ZERO_VECTOR", "ZERO_ROTATION",
-        "PI", "TWO_PI", "PI_BY_TWO", "DEG_TO_RAD", "RAD_TO_DEG",
-        "ALL_SIDES", "AGENT", "ACTIVE", "PASSIVE", "SCRIPTED",
-        "OBJECT_NAME", "OBJECT_DESC", "OBJECT_POS", "OBJECT_OWNER",
-        "OBJECT_CREATOR", "OBJECT_GROUP", "OBJECT_VELOCITY",
-        "CHANGED_INVENTORY", "CHANGED_OWNER", "CHANGED_REGION",
-        "CHANGED_TELEPORT", "CHANGED_REGION_START", "CHANGED_LINK",
-        "CHANGED_SHAPE", "CHANGED_COLOR", "CHANGED_TEXTURE",
-        "PERMISSION_TAKE_CONTROLS", "PERMISSION_TRIGGER_ANIMATION",
-        "PERMISSION_ATTACH", "PERMISSION_DEBIT", "PERMISSION_TRACK_CAMERA",
-        "PUBLIC_CHANNEL", "DEBUG_CHANNEL",
-        "INVENTORY_ALL", "INVENTORY_SCRIPT", "INVENTORY_NOTECARD",
-        "INVENTORY_TEXTURE", "INVENTORY_SOUND", "INVENTORY_OBJECT",
-        "STATUS_PHYSICS", "STATUS_PHANTOM", "STATUS_ROTATE_X",
-        "STATUS_ROTATE_Y", "STATUS_ROTATE_Z",
-        "HTTP_METHOD", "HTTP_MIMETYPE", "HTTP_BODY_MAXLENGTH",
-        "HTTP_VERIFY_CERT", "HTTP_VERBOSE_THROTTLE"
-    )
-
-    /** Event handler names (used for completion inside `state` blocks). */
-    @JvmField
-    val EVENTS: List<String> = listOf(
-        "state_entry", "state_exit",
-        "touch_start", "touch", "touch_end",
-        "collision_start", "collision", "collision_end",
-        "land_collision_start", "land_collision", "land_collision_end",
-        "timer", "listen", "sensor", "no_sensor",
-        "control", "moving_start", "moving_end",
-        "money", "email", "at_target", "not_at_target",
-        "at_rot_target", "not_at_rot_target",
-        "run_time_permissions", "changed", "attach",
-        "dataserver", "object_rez", "remote_data",
-        "http_response", "http_request",
-        "link_message", "on_rez",
-        "transaction_result", "experience_permissions",
-        "experience_permissions_denied", "path_update"
-    )
+    val CONSTANTS: List<String>
 
     @JvmField
-    val TYPES: List<String> = listOf(
-        "integer", "float", "string", "key", "vector",
-        "rotation", "quaternion", "list"
-    )
+    val EVENTS: List<String>
 
+    /** The LSL reserved-word set used by the lexer/highlighter. */
     @JvmField
     val KEYWORDS: List<String> = listOf(
-        "default", "state", "if", "else", "while", "do",
-        "for", "return", "jump", "print"
+        "default", "state", "if", "else", "while", "do", "for",
+        "return", "jump", "print"
     )
+
+    /** LSL primitive types (also lexed as keywords). */
+    @JvmField
+    val TYPES: List<String> = listOf(
+        "integer", "float", "string", "key",
+        "vector", "rotation", "quaternion", "list"
+    )
+
+    init {
+        // Default fallbacks if the resource is missing for any reason —
+        // never leaves the user with zero completion.
+        val functions = mutableListOf<String>()
+        val constants = mutableListOf<String>()
+        val events = mutableListOf<String>()
+        var bucket: MutableList<String>? = null
+
+        try {
+            val stream = LslBuiltins::class.java.getResourceAsStream("/builtins/lsl-builtins.txt")
+            if (stream != null) {
+                BufferedReader(InputStreamReader(stream, Charsets.UTF_8)).use { r ->
+                    r.lineSequence().forEach { raw ->
+                        val line = raw.trim()
+                        if (line.isEmpty()) return@forEach
+                        if (line.startsWith("#")) {
+                            bucket = when {
+                                line.contains("functions") -> functions
+                                line.contains("constants") -> constants
+                                line.contains("events")    -> events
+                                else                       -> null
+                            }
+                            return@forEach
+                        }
+                        bucket?.add(line)
+                    }
+                }
+            }
+        } catch (_: Exception) {
+            // fall through to defaults; FUNCTIONS/CONSTANTS will just be sparse
+        }
+
+        // Minimal safety net so completion isn't completely empty if the
+        // resource was somehow unreadable.
+        if (functions.isEmpty()) functions.addAll(listOf(
+            "llSay", "llOwnerSay", "llWhisper", "llShout",
+            "llGetOwner", "llGetKey", "llGetObjectName", "llSetObjectName",
+            "llListen", "llListenRemove", "llDialog", "llTextBox",
+            "llSetText", "llHTTPRequest", "llRequestPermissions",
+            "llGiveMoney", "llSleep", "llSetTimerEvent", "llResetScript", "llDie"
+        ))
+        if (constants.isEmpty()) constants.addAll(listOf(
+            "TRUE", "FALSE", "NULL_KEY", "EOF", "PI", "TWO_PI", "PI_BY_TWO",
+            "PERMISSION_DEBIT", "CHANGED_OWNER", "HTTP_METHOD"
+        ))
+        if (events.isEmpty()) events.addAll(listOf(
+            "state_entry", "state_exit", "touch_start", "touch", "touch_end",
+            "listen", "timer", "money", "http_response", "changed",
+            "on_rez", "attach", "run_time_permissions", "link_message"
+        ))
+
+        FUNCTIONS = functions.toList()
+        CONSTANTS = constants.toList()
+        EVENTS    = events.toList()
+    }
+
+    /** Quick predicate for `ll*` recognition without scanning the full list. */
+    @JvmStatic
+    fun looksLikeBuiltinFunction(name: String): Boolean =
+        name.length >= 3 && name[0] == 'l' && name[1] == 'l' && name[2].isUpperCase()
+
+    @JvmStatic
+    fun isFunction(name: String): Boolean = FUNCTIONS.contains(name)
+    @JvmStatic
+    fun isConstant(name: String): Boolean = CONSTANTS.contains(name)
+    @JvmStatic
+    fun isEvent(name: String): Boolean    = EVENTS.contains(name)
+    @JvmStatic
+    fun isType(name: String): Boolean     = TYPES.contains(name)
+    @JvmStatic
+    fun isKeyword(name: String): Boolean  = KEYWORDS.contains(name)
 }
