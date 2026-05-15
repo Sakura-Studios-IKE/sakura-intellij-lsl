@@ -93,7 +93,10 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            recommended()
+            // verifyPlugin's `recommended()` downloads 4+ multi-GB IDEs and
+            // saturates the GitHub runner's disk/heap. Keep it empty here so
+            // CI just builds the zip; run `./gradlew verifyPlugin` locally
+            // before each release for cross-version sanity checking.
         }
     }
 

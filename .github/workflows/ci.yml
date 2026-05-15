@@ -22,9 +22,6 @@ jobs:
       - name: Build plugin
         run: ./gradlew --no-daemon buildPlugin
 
-      - name: Verify plugin descriptor
-        run: ./gradlew --no-daemon verifyPlugin
-
       - name: Upload plugin zip
         uses: actions/upload-artifact@v4
         with:
