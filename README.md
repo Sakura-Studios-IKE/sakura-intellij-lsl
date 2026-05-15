@@ -89,6 +89,16 @@ paste manually into the SL script editor.
   the script's edit dialog being open. The plugin cannot authenticate
   against the SL grid for you.
 
+## Companion projects
+
+`sakura-intellij-lsl` is the IDE front-end in Sakura Studios' five-tool
+open-source LSL toolchain:
+
+* [`sakura-lslc`](https://github.com/ShihoSakura/sakura-lslc) — compiler
+* [`sakura-slemu`](https://github.com/ShihoSakura/sakura-slemu) — emulator
+* [`sakura-lsldb`](https://github.com/ShihoSakura/sakura-lsldb) — debugger
+* [`sakura-lsltest`](https://github.com/ShihoSakura/sakura-lsltest) — test framework
+
 ## License
 
 MIT — see `LICENSE`.
