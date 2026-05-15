@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <g fill="none" stroke="none">
+    <!-- five sakura petals around centre (8,8) -->
+    <ellipse cx="8" cy="3.2" rx="1.7" ry="2.7" fill="#ffb7d5"/>
+    <ellipse cx="12.6" cy="6.5" rx="1.7" ry="2.7" fill="#ffb7d5" transform="rotate(72 12.6 6.5)"/>
+    <ellipse cx="10.8" cy="12.2" rx="1.7" ry="2.7" fill="#ffb7d5" transform="rotate(144 10.8 12.2)"/>
+    <ellipse cx="5.2" cy="12.2" rx="1.7" ry="2.7" fill="#ffb7d5" transform="rotate(216 5.2 12.2)"/>
+    <ellipse cx="3.4" cy="6.5" rx="1.7" ry="2.7" fill="#ffb7d5" transform="rotate(288 3.4 6.5)"/>
+    <!-- centre -->
+    <circle cx="8" cy="8" r="1.6" fill="#ff5fa2"/>
+    <circle cx="8" cy="8" r="0.6" fill="#fff2a8"/>
+  </g>
+</svg>

@@ -1,0 +1,118 @@
+<idea-plugin>
+    <id>com.sakurastudios.lsl</id>
+    <name>Sakura LSL</name>
+    <vendor email="shiho@sakurastudios.eu" url="https://sakurastudios.eu">Sakura Studios, IKE</vendor>
+
+    <description><![CDATA[
+        <h2>Sakura LSL</h2>
+        <p>
+            A one-stop IDE experience for <b>Linden Scripting Language</b> (LSL)
+            developers using the <a href="https://sakurastudios.eu">Sakura toolchain</a>:
+            <code>sakura-lslc</code> (compiler), <code>sakura-slemu</code> (emulator),
+            and <code>sakura-lsltest</code> (test runner).
+        </p>
+        <ul>
+            <li>File-type recognition and a friendly sakura icon for <code>.lsl</code>
+                and <code>.lslh</code> files.</li>
+            <li>Hand-rolled lexer with keyword, builtin, constant, comment and
+                string highlighting.</li>
+            <li>Smart completion of LSL built-in functions, constants and events,
+                baked in as a static table.</li>
+            <li>Live error checking via an <i>ExternalAnnotator</i> that runs
+                <code>sakura-lslc</code> in the background and surfaces gcc-style
+                diagnostics inline.</li>
+            <li>Two run configuration types: <i>LSL: run in slemu</i> and
+                <i>LSL: lsltest run</i>.</li>
+            <li>Hot reload to Second Life through the Firestorm
+                <b>external editor watch</b> pattern: the plugin writes the saved
+                script to a path Firestorm has been told to watch, and Firestorm
+                reloads it in place. (SL has no public upload API, so an
+                already-logged-in viewer is required.) A "copy script to clipboard"
+                fallback is also provided.</li>
+            <li>Status-bar compile light: green / yellow / red — click to jump to
+                the first diagnostic.</li>
+        </ul>
+        <p>
+            Configure <i>Settings → Tools → Sakura LSL</i> with the paths to
+            <code>lslc</code>, <code>slemu</code>, <code>lsltest</code>, and your
+            Firestorm external-editor watch directory.
+        </p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <h3>1.0.0</h3>
+        <ul>
+            <li>Initial release: file type, lexer, completion, external annotator,
+                two run configuration types, hot-reload action, settings panel,
+                and status-bar compile light.</li>
+        </ul>
+    ]]></change-notes>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType
+            name="LSL"
+            language="LSL"
+            extensions="lsl;lslh"
+            implementationClass="com.sakurastudios.lsl.LslFileType"
+            fieldName="INSTANCE"/>
+
+        <lang.syntaxHighlighterFactory
+            language="LSL"
+            implementationClass="com.sakurastudios.lsl.LslSyntaxHighlighterFactory"/>
+
+        <completion.contributor
+            language="LSL"
+            implementationClass="com.sakurastudios.lsl.LslCompletionContributor"/>
+
+        <externalAnnotator
+            language="LSL"
+            implementationClass="com.sakurastudios.lsl.LslAnnotator"/>
+
+        <configurationType
+            implementation="com.sakurastudios.lsl.LslRunConfigurationType"/>
+
+        <configurationType
+            implementation="com.sakurastudios.lsl.LsltestRunConfigurationType"/>
+
+        <applicationConfigurable
+            parentId="tools"
+            id="com.sakurastudios.lsl.settings"
+            displayName="Sakura LSL"
+            instance="com.sakurastudios.lsl.LslcConfigurable"/>
+
+        <applicationService
+            serviceImplementation="com.sakurastudios.lsl.LslcSettings"/>
+
+        <statusBarWidgetFactory
+            id="SakuraLsl.CompileStatus"
+            order="last"
+            implementation="com.sakurastudios.lsl.LslStatusBarWidgetFactory"/>
+
+        <notificationGroup
+            id="Sakura LSL"
+            displayType="BALLOON"/>
+    </extensions>
+
+    <actions>
+        <action
+            id="Sakura.LSL.HotReload"
+            class="com.sakurastudios.lsl.LslHotReloadAction"
+            text="Hot Reload to Second Life"
+            description="Copy the current LSL script to the Firestorm external-editor watch directory.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt R"/>
+        </action>
+
+        <action
+            id="Sakura.LSL.CopyToClipboard"
+            class="com.sakurastudios.lsl.LslCopyToClipboardAction"
+            text="Copy LSL Script to Clipboard"
+            description="Copy the current LSL script for pasting into Second Life.">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
