@@ -43,39 +43,47 @@ class LslCompletionContributor : CompletionContributor() {
             context: ProcessingContext,
             result: CompletionResultSet
         ) {
-            for (fn in LslBuiltins.FUNCTIONS) {
+            for ((name, fn) in LslBuiltins.FUNCTIONS) {
+                val tail = "(${fn.params.joinToString(", ")})"
+                val ret = fn.ret + (if (fn.monoOnly) "  (Mono)" else "")
                 result.addElement(
                     PrioritizedLookupElement.withPriority(
-                        LookupElementBuilder.create(fn)
+                        LookupElementBuilder.create(name)
                             .withIcon(LslIcons.FILE)
-                            .withTypeText("LSL function", true)
+                            .withTailText(tail, true)
+                            .withTypeText(ret, true)
+                            .withPresentableText(name)
                             .withInsertHandler { ctx, _ ->
-                                // Add () and place caret inside.
                                 val editor = ctx.editor
                                 val offset = editor.caretModel.offset
                                 val doc = editor.document
                                 doc.insertString(offset, "()")
-                                editor.caretModel.moveToOffset(offset + 1)
+                                // park the caret inside the parens when the
+                                // function takes args; after them when zero-arity
+                                editor.caretModel.moveToOffset(offset + if (fn.params.isEmpty()) 2 else 1)
                             },
                         PRIORITY_BUILTIN_FN
                     )
                 )
             }
-            for (c in LslBuiltins.CONSTANTS) {
+            for ((name, c) in LslBuiltins.CONSTANTS) {
                 result.addElement(
                     PrioritizedLookupElement.withPriority(
-                        LookupElementBuilder.create(c)
-                            .withTypeText("LSL constant", true)
+                        LookupElementBuilder.create(name)
+                            .withTailText(if (c.value.isNotEmpty()) " = ${c.value}" else "", true)
+                            .withTypeText(c.type, true)
                             .bold(),
                         PRIORITY_CONSTANT
                     )
                 )
             }
-            for (e in LslBuiltins.EVENTS) {
+            for ((name, e) in LslBuiltins.EVENTS) {
+                val tail = "(${e.params.joinToString(", ") { "${it.type} ${it.name}" }})"
                 result.addElement(
                     PrioritizedLookupElement.withPriority(
-                        LookupElementBuilder.create(e)
-                            .withTypeText("LSL event", true),
+                        LookupElementBuilder.create(name)
+                            .withTailText(tail, true)
+                            .withTypeText("event", true),
                         PRIORITY_EVENT
                     )
                 )

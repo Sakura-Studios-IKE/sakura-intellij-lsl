@@ -82,6 +82,10 @@
             language="sakura-lsl"
             implementationClass="com.sakurastudios.lsl.LslDocumentationProvider"/>
 
+        <codeInsight.parameterInfo
+            language="sakura-lsl"
+            implementationClass="com.sakurastudios.lsl.LslParameterInfoHandler"/>
+
         <configurationType
             implementation="com.sakurastudios.lsl.LslRunConfigurationType"/>
 
@@ -105,6 +109,19 @@
         <notificationGroup
             id="Sakura LSL"
             displayType="BALLOON"/>
+
+        <!-- Sidebar tool window with Emulator + Debugger panes. -->
+        <toolWindow
+            id="Sakura LSL"
+            anchor="bottom"
+            icon="com.sakurastudios.lsl.LslIcons.FILE"
+            factoryClass="com.sakurastudios.lsl.LslToolWindowFactory"/>
+
+        <!-- New Project wizard templates (IntelliJ Community + Ultimate). -->
+        <directoryProjectGenerator
+            implementation="com.sakurastudios.lsl.JustLslProjectGenerator"/>
+        <directoryProjectGenerator
+            implementation="com.sakurastudios.lsl.FullStackLslProjectGenerator"/>
     </extensions>
 
     <actions>
@@ -125,6 +142,17 @@
             description="Copy the current LSL script for pasting into Second Life.">
             <add-to-group group-id="ToolsMenu" anchor="last"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
+        <action
+            id="Sakura.LSL.RunCurrentFile"
+            class="com.sakurastudios.lsl.LslRunCurrentFileAction"
+            text="Run in slemu (current file)"
+            description="Compile the open LSL file with sakura-lslc and run it in sakura-slemu.">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <add-to-group group-id="RunMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="control alt L"/>
         </action>
     </actions>
 </idea-plugin>
