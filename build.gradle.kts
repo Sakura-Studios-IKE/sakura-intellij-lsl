@@ -2,8 +2,8 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.9.24"
-    id("org.jetbrains.intellij.platform") version "2.0.1"
+    id("org.jetbrains.kotlin.jvm") version "2.3.0"
+    id("org.jetbrains.intellij.platform") version "2.16.0"
 }
 
 group = providers.gradleProperty("pluginGroup").get()
@@ -22,11 +22,22 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        create(
-            providers.gradleProperty("platformType").get(),
-            providers.gradleProperty("platformVersion").get()
-        )
-        instrumentationTools()
+        // Prefer the maintainer's locally-installed IDE when set via
+        //   -PlocalIdePath=/path/to/IDE
+        // or via the SAKURA_LSL_IDE env var. This is the most reliable
+        // way to build against an EAP / very-recent release whose
+        // artefacts aren't on JetBrains' Maven mirror yet, and makes
+        // the runIde sandbox identical to the maintainer's IDE.
+        val explicit = (project.findProperty("localIdePath") as String?)
+            ?: System.getenv("SAKURA_LSL_IDE")
+        if (!explicit.isNullOrBlank()) {
+            local(explicit)
+        } else {
+            create(
+                providers.gradleProperty("platformType").get(),
+                providers.gradleProperty("platformVersion").get()
+            )
+        }
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)
@@ -54,13 +65,14 @@ intellijPlatform {
 
 tasks {
     wrapper {
-        gradleVersion = "8.7"
+        gradleVersion = "9.0"
     }
 
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = providers.gradleProperty("javaVersion").get()
-            freeCompilerArgs = listOf("-Xjsr305=strict")
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.fromTarget(
+                providers.gradleProperty("javaVersion").get()))
+            freeCompilerArgs.set(listOf("-Xjsr305=strict"))
         }
     }
 

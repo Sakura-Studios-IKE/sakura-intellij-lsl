@@ -42,3 +42,6 @@ Desktop.ini
 # IntelliJ Platform plugin build artifacts
 *.zip
 sandbox/
+
+# IntelliJ Platform gradle plugin v2 sandbox
+.intellijPlatform/

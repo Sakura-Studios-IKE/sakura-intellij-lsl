@@ -52,22 +52,22 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileType
-            name="LSL"
-            language="LSL"
+            name="Sakura LSL"
+            language="sakura-lsl"
             extensions="lsl;lslh"
             implementationClass="com.sakurastudios.lsl.LslFileType"
             fieldName="INSTANCE"/>
 
         <lang.syntaxHighlighterFactory
-            language="LSL"
+            language="sakura-lsl"
             implementationClass="com.sakurastudios.lsl.LslSyntaxHighlighterFactory"/>
 
         <completion.contributor
-            language="LSL"
+            language="sakura-lsl"
             implementationClass="com.sakurastudios.lsl.LslCompletionContributor"/>
 
         <externalAnnotator
-            language="LSL"
+            language="sakura-lsl"
             implementationClass="com.sakurastudios.lsl.LslAnnotator"/>
 
         <configurationType
