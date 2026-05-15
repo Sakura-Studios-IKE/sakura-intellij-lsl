@@ -9,6 +9,22 @@ pipeline promotes it to a numbered version on tag.
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-05-15
+
+### Changed
+- Tighten supported IDE range to **2025.3 – 2026.2** (`pluginSinceBuild = 253`,
+  `pluginUntilBuild = 262.*`). Six of our API calls
+  (`DirectoryProjectGenerator`, `JDOMExternalizerUtil`, friends) are marked
+  `@ApiStatus.Internal` in 2024.1 – 2025.2 and were promoted to
+  `@Experimental` in 253+, where the JetBrains Marketplace verifier permits
+  them. Lower this bound only after replacing those calls with public-API
+  equivalents.
+
+### Fixed
+- Marketplace verifier rejected v1.0.0 with *"Plugin uses the Internal API"*;
+  this release passes verification cleanly.
+
+
 ### Added
 - Right-click any `.lsl` / `.lslh` file in the editor or Project view →
   **Run in slemu (current file)** (default shortcut `Ctrl+Alt+L`). No
