@@ -23,6 +23,7 @@ class LslcConfigurable : Configurable {
 
     private val lslcField        = textWithBrowse("Choose lslc binary")
     private val slemuField       = textWithBrowse("Choose slemu binary")
+    private val lsldbField       = textWithBrowse("Choose lsldb binary")
     private val lsltestField     = textWithBrowse("Choose lsltest binary")
     private val watchDirField    = TextFieldWithBrowseButton().apply {
         addBrowseFolderListener(
@@ -54,6 +55,7 @@ class LslcConfigurable : Configurable {
             .addSeparator()
             .addLabeledComponent(JBLabel("lslc path:"), lslcField, 1, false)
             .addLabeledComponent(JBLabel("slemu path:"), slemuField, 1, false)
+            .addLabeledComponent(JBLabel("lsldb path:"), lsldbField, 1, false)
             .addLabeledComponent(JBLabel("lsltest path:"), lsltestField, 1, false)
             .addLabeledComponent(JBLabel("Firestorm watch directory:"), watchDirField, 1, false)
             .addLabeledComponent(JBLabel("Extra lslc flags:"), extraFlagsField, 1, false)
@@ -78,6 +80,7 @@ class LslcConfigurable : Configurable {
         val s = LslcSettings.getInstance()
         return s.lslcPath          != lslcField.text ||
                s.slemuPath         != slemuField.text ||
+               s.lsldbPath         != lsldbField.text ||
                s.lslTestPath       != lsltestField.text ||
                s.firestormWatchDir != watchDirField.text ||
                s.extraLslcFlags    != extraFlagsField.text
@@ -87,6 +90,7 @@ class LslcConfigurable : Configurable {
         val s = LslcSettings.getInstance()
         s.lslcPath          = lslcField.text
         s.slemuPath         = slemuField.text
+        s.lsldbPath         = lsldbField.text
         s.lslTestPath       = lsltestField.text
         s.firestormWatchDir = watchDirField.text
         s.extraLslcFlags    = extraFlagsField.text
@@ -96,6 +100,7 @@ class LslcConfigurable : Configurable {
         val s = LslcSettings.getInstance()
         lslcField.text        = s.lslcPath
         slemuField.text       = s.slemuPath
+        lsldbField.text       = s.lsldbPath
         lsltestField.text     = s.lslTestPath
         watchDirField.text    = s.firestormWatchDir
         extraFlagsField.text  = s.extraLslcFlags

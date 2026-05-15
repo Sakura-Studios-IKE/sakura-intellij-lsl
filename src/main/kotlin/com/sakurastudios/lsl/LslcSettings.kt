@@ -23,6 +23,9 @@ class LslcSettings : PersistentStateComponent<LslcSettings> {
     /** Path or command name for `sakura-slemu`. */
     @JvmField var slemuPath: String = "slemu"
 
+    /** Path or command name for `sakura-lsldb` (the debugger frontend). */
+    @JvmField var lsldbPath: String = "lsldb"
+
     /** Path or command name for `sakura-lsltest`. */
     @JvmField var lslTestPath: String = "lsltest"
 

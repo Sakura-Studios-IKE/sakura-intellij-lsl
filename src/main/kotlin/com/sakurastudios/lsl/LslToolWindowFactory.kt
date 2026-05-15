@@ -213,11 +213,14 @@ private class DebuggerPanel(private val project: Project) : JPanel(BorderLayout(
         val settings = LslcSettings.getInstance()
         val lslc = settings.lslcPath.ifBlank { "lslc" }
         val slemu = settings.slemuPath.ifBlank { "slemu" }
-        // lsldb path: same dir as slemu, or "lsldb" on PATH.
+        // Prefer the explicit setting; otherwise discover next to slemu;
+        // last resort, fall back to `lsldb` on PATH.
+        val configured = settings.lsldbPath.takeIf { it.isNotBlank() && it != "lsldb" }
         val slemuFile = File(slemu)
-        val lsldbPath = (slemuFile.parentFile?.resolve("lsldb"))?.takeIf { it.canExecute() }?.absolutePath
+        val lsldbPath = configured
+            ?: (slemuFile.parentFile?.resolve("lsldb"))?.takeIf { it.canExecute() }?.absolutePath
             ?: (slemuFile.parentFile?.parentFile?.resolve("sakura-lsldb/lsldb"))?.takeIf { it.canExecute() }?.absolutePath
-            ?: "lsldb"
+            ?: settings.lsldbPath.ifBlank { "lsldb" }
 
         // Compile first.
         append("$ $lslc -c $script\n")

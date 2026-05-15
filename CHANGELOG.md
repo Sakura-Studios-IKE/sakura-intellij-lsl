@@ -9,6 +9,17 @@ pipeline promotes it to a numbered version on tag.
 
 ## [Unreleased]
 
+## [1.0.3] — 2026-05-15
+
+### Added
+- **`lsldb path`** field in **Settings → Tools → Sakura LSL**. Until now
+  the Debugger tab in the Sakura LSL tool window discovered `lsldb` by
+  looking next to the configured `slemu` binary, then falling back to
+  `PATH`. That breaks for users whose tools live in `/usr/bin/` (AUR
+  install) because the configured `slemu` path doesn't have a sibling
+  `lsldb`. Explicit setting added; the old discovery logic remains as a
+  fallback for source-tree layouts.
+
 ## [1.0.2] — 2026-05-15
 
 ### Fixed
