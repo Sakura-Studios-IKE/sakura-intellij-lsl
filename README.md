@@ -1,34 +1,70 @@
 # Sakura LSL — IntelliJ Platform Plugin
 
+[![CI](https://github.com/Sakura-Studios-IKE/sakura-intellij-lsl/actions/workflows/ci.yml/badge.svg)](https://github.com/Sakura-Studios-IKE/sakura-intellij-lsl/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/Sakura-Studios-IKE/sakura-intellij-lsl)](https://github.com/Sakura-Studios-IKE/sakura-intellij-lsl/releases)
+
 A one-stop IDE experience for **Linden Scripting Language** (LSL) developers
 using the Sakura toolchain (`sakura-lslc`, `sakura-slemu`, `sakura-lsltest`).
 
 ## Features
 
+### Editor
+
 - Recognises `.lsl` and `.lslh` files with a sakura icon.
 - Hand-rolled lexer with keyword, builtin, constant, comment and string
   highlighting.
-- Smart completion of LSL built-in functions, constants, types, keywords and
-  event handlers.
-- Live error checking via an `ExternalAnnotator` that runs `sakura-lslc`
-  in the background and surfaces gcc-style diagnostics inline.
-- Two run configuration types:
-  - **LSL: run in slemu** — compile with `lslc` and run the result in the
-    Sakura emulator.
-  - **LSL: lsltest run** — execute a directory of `test_*.py` files through
-    the `lsltest` harness.
-- **Hot Reload to Second Life** — write the current script to a Firestorm
-  external-editor watch directory.
-- **Copy LSL Script to Clipboard** — fallback for pasting into the in-world
-  script editor.
-- Status-bar compile light (green / yellow / red) — click to jump to the
-  first diagnostic.
+- **Smart completion** of LSL built-in functions, constants, types,
+  keywords and event handlers, populated from the same builtin table
+  the compiler uses.
+- **Parameter info popups** (Ctrl+P) that show the function signature
+  and highlight the current argument as you type.
+- **Hover documentation** for every built-in function, constant, and
+  event — including Mono-only badges where applicable.
+- **Live error checking** via an `ExternalAnnotator` that runs
+  `sakura-lslc` in the background and surfaces gcc-style diagnostics
+  inline.
+- Brace matcher, line/block commenter (`//` and `/* */`).
+
+### Run, debug, test
+
+- **Run current file** (`Ctrl+Alt+L`) — no run configuration needed.
+- **LSL: run in slemu** rich run configuration UI:
+  script picker, volume directory, owner/avatar fixtures, HTTP mode
+  (real vs fixture), tracing, max steps, wall-clock timeout, scripted
+  commands file or inline events, extra slemu args.
+- **LSL: lsltest run** configuration for running a directory of
+  `test_*.py` files through the `lsltest` harness.
+- **Sakura LSL tool window** with two tabs:
+  - **Emulator** — keep an interactive `slemu` session attached and
+    send commands to it from a panel.
+  - **Debugger** — graphical front-end to `lsldb`: breakpoints,
+    step/continue, current-line view, locals, catchpoints.
+- Status-bar compile light (green / yellow / red) — click to jump to
+  the first diagnostic.
+
+### Project wizards
+
+- **Just LSL** — scripts/, tests/, ready to compile and emulate.
+- **Full Stack LSL** — same plus a FastAPI + Alembic + PostgreSQL
+  backend, a React (Vite) frontend, and a `docker-compose.yml` to spin
+  them up locally.
+
+### Second Life integration
+
+- **Hot Reload to Second Life** — write the current script to a
+  Firestorm external-editor watch directory.
+- **Copy LSL Script to Clipboard** — fallback for pasting into the
+  in-world script editor.
+
+See [`CHANGELOG.md`](./CHANGELOG.md) for the full version history.
 
 ## Building
 
-You need JDK 17 and Gradle 8.7 (or run `gradle wrapper --gradle-version 8.7`
-once to materialise the wrapper that ships in this repository as a
-placeholder).
+You need JDK 17 and Gradle 9.0 (the wrapper in this repository will
+fetch it on first run). The plugin builds against the IntelliJ Platform
+2025.3.5 SDK by default; set `SAKURA_LSL_IDE=/path/to/your/IDEA` to
+build against your actually-installed IDE instead.
 
 ```bash
 ./gradlew buildPlugin
@@ -42,10 +78,23 @@ build/distributions/sakura-lsl-1.0.0.zip
 
 ## Installing
 
-1. Open IntelliJ IDEA (Community 2024.1 or later).
+### From the JetBrains Marketplace (recommended)
+
+1. In IntelliJ: **Settings → Plugins → Marketplace**.
+2. Search for **Sakura LSL**.
+3. Click **Install** and restart the IDE.
+
+### From a zip
+
+1. Open IntelliJ IDEA (2024.1 or later — verified through 2026.x).
 2. **Settings → Plugins → ⚙ (gear icon) → Install Plugin from Disk…**
 3. Pick `build/distributions/sakura-lsl-1.0.0.zip`.
 4. Restart the IDE when prompted.
+
+> If you previously installed `io.github.riej.lsl`, you can safely
+> uninstall it — Sakura LSL is a fully standalone plugin with its own
+> file type, lexer, completions, inspections, run configs, debugger
+> tool window, and project wizards.
 
 ## Configuring
 

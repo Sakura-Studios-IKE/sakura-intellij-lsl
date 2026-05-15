@@ -91,6 +91,27 @@ intellijPlatform {
             recommended()
         }
     }
+
+    // Publishing to JetBrains Marketplace. Requires:
+    //   PUBLISH_TOKEN          — Marketplace API token (Settings → My Tokens)
+    //   CERTIFICATE_CHAIN      — full plugin signing certificate (PEM)
+    //   PRIVATE_KEY            — signing key (PEM)
+    //   PRIVATE_KEY_PASSWORD   — passphrase for the signing key
+    // Set these as repository secrets; the CI workflow injects them.
+    signing {
+        certificateChain = providers.environmentVariable("CERTIFICATE_CHAIN")
+        privateKey       = providers.environmentVariable("PRIVATE_KEY")
+        password         = providers.environmentVariable("PRIVATE_KEY_PASSWORD")
+    }
+
+    publishing {
+        token   = providers.environmentVariable("PUBLISH_TOKEN")
+        // "default" channel is public; tag a pre-release with -beta etc.
+        // to push to a `beta` channel before flipping the bits.
+        channels = providers.gradleProperty("pluginVersion").map { ver ->
+            listOf(if (ver.contains('-')) ver.substringAfter('-').substringBefore('.') else "default")
+        }
+    }
 }
 
 tasks {

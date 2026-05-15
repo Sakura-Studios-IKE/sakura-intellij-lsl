@@ -1,0 +1,150 @@
+<!-- JetBrains Marketplace plugin description — keep semantic, no inline styles. -->
+<h2>Sakura LSL</h2>
+
+<p>
+  A complete IDE experience for <strong>Second Life</strong> developers
+  working in <strong>Linden Scripting Language</strong> (LSL).
+  Authored and maintained by <em>Sakura Studios, IKE</em>.
+</p>
+
+<h3>What you get</h3>
+
+<ul>
+  <li>
+    <strong>Syntax-aware editor</strong> for <code>.lsl</code> and
+    <code>.lslh</code> files: lexer, highlighter, brace matcher,
+    line/block commenter (<code>Ctrl+/</code>, <code>Ctrl+Shift+/</code>).
+  </li>
+  <li>
+    <strong>Completion</strong> over the full LSL standard library
+    &mdash; 540 functions, 534 constants, 49 events &mdash; each entry
+    shows its parameter types and return type as tail-text.
+  </li>
+  <li>
+    <strong>Parameter info</strong> while typing arguments: the
+    function signature pops up with the active parameter highlighted,
+    including a <code>(Mono only)</code> tag where relevant.
+  </li>
+  <li>
+    <strong>Quick documentation</strong> on hover or <code>Ctrl+Q</code>:
+    category (function / constant / event), full signature, link to
+    the LSL Wiki entry.
+  </li>
+  <li>
+    <strong>Live diagnostics</strong> via an external annotator that
+    runs <code>sakura-lslc</code> in the background on every pause-in-
+    typing and surfaces gcc-style errors / warnings / suggestions
+    inline.
+  </li>
+  <li>
+    <strong>One-click run</strong>: right-click any <code>.lsl</code>
+    file &rarr; <em>Run in slemu (current file)</em>
+    (<code>Ctrl+Alt+L</code>). The plugin compiles with
+    <code>sakura-lslc</code>, hands the bytecode to
+    <code>sakura-slemu</code>, and streams JSON events into the Run
+    console.
+  </li>
+  <li>
+    <strong>Rich Run Configuration UI</strong> with first-class fields
+    for the emulator's options: volume directory, real HTTP vs fixture,
+    owner UUID / name / balance, extra avatars table, pre-defined
+    commands (file or inline), object name, step / wall-time caps.
+  </li>
+  <li>
+    <strong>Sidebar tool window</strong> with two tabs: an
+    <em>Emulator</em> pane showing the live JSON event log plus a
+    send-command input for player actions
+    (<code>TOUCH_AS</code>, <code>DIALOG_REPLY</code>, &hellip;), and a
+    <em>Debugger</em> pane that hosts an embedded
+    <code>sakura-lsldb</code> REPL with quick-action buttons
+    (<em>Step</em>, <em>Continue</em>, <em>Locals</em>,
+    <em>Globals</em>, <em>Snapshot</em>).
+  </li>
+  <li>
+    <strong>Project wizards</strong>: two new templates appear in
+    <em>File &rarr; New &rarr; Project</em>:
+    <ul>
+      <li>
+        <em>Sakura LSL &mdash; Just LSL</em> &mdash; a clean
+        <code>scripts/</code> + <code>tests/</code> skeleton with a
+        <code>Makefile</code> wired up to compile and test.
+      </li>
+      <li>
+        <em>Sakura LSL &mdash; Full Stack</em> &mdash; the same plus a
+        Python <code>backend/</code> (FastAPI + SQLAlchemy + Alembic),
+        a <code>frontend/</code> (React + Vite), and
+        <code>docker-compose.yml</code> with PostgreSQL.
+      </li>
+    </ul>
+  </li>
+  <li>
+    <strong>Hot reload to Second Life</strong> via Firestorm's
+    external-editor watch directory. Configure the path in settings;
+    saving an <code>.lsl</code> drops a copy where Firestorm picks it
+    up and reloads in-world. A <em>Copy script to clipboard</em>
+    fallback is also provided. (LL does not expose a third-party
+    upload API; a logged-in viewer is required.)
+  </li>
+  <li>
+    <strong>Status-bar compile light</strong>: green / yellow / red,
+    click to navigate to the first diagnostic.
+  </li>
+</ul>
+
+<h3>Requirements</h3>
+
+<p>
+  IntelliJ Platform 2024.1 or newer (any IDEA, CLion, PyCharm,
+  WebStorm, &hellip; all work). The plugin shells out to the
+  <a href="https://github.com/Sakura-Studios-IKE/sakura-lslc">
+  <code>sakura-lslc</code></a> compiler and
+  <a href="https://github.com/Sakura-Studios-IKE/sakura-slemu">
+  <code>sakura-slemu</code></a> emulator binaries. Install those
+  separately from their GitHub releases or, on Arch Linux, via
+  <code>yay -S sakura-lslc sakura-slemu</code> /
+  <code>sakura-lsldb</code> / <code>sakura-lsltest</code>.
+</p>
+
+<p>
+  After installation, open <em>Settings &rarr; Tools &rarr; Sakura
+  LSL</em> and point the plugin at your installed binaries.
+</p>
+
+<h3>The Sakura LSL toolchain</h3>
+
+<p>
+  This plugin is the IDE front-end for an open-source toolchain. The
+  other tools install independently:
+</p>
+
+<ul>
+  <li><a href="https://github.com/Sakura-Studios-IKE/sakura-lslc">
+    <strong>sakura-lslc</strong></a> &mdash; pure-C99 offline LSL Mono
+    compiler. gcc-style diagnostics, full preprocessor, portable
+    bytecode.
+  </li>
+  <li><a href="https://github.com/Sakura-Studios-IKE/sakura-slemu">
+    <strong>sakura-slemu</strong></a> &mdash; headless region emulator.
+    Full LSL event loop, listen / link-message routing, L$ economy,
+    linkset-data persistence, HTTP backend (real <code>curl</code> or
+    JSON fixture), HUD / menu / dialog / chat simulation.
+  </li>
+  <li><a href="https://github.com/Sakura-Studios-IKE/sakura-lsldb">
+    <strong>sakura-lsldb</strong></a> &mdash; gdb-style CLI debugger.
+    Source-line breakpoints, single-step, print, catchpoints.
+  </li>
+  <li><a href="https://github.com/Sakura-Studios-IKE/sakura-lsltest">
+    <strong>sakura-lsltest</strong></a> &mdash; pytest-style test
+    framework. Compile-only and full-scene scenarios with player
+    actions.
+  </li>
+</ul>
+
+<h3>Open source &mdash; MIT</h3>
+
+<p>
+  Plugin source code lives at
+  <a href="https://github.com/Sakura-Studios-IKE/sakura-intellij-lsl">
+  github.com/Sakura-Studios-IKE/sakura-intellij-lsl</a>. Bug reports
+  and pull requests welcome.
+</p>
